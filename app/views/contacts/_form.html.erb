@@ -19,6 +19,14 @@
     <%= f.label :email %><br>
     <%= f.text_field :email %>
   </div>
+
+  <div id="phones">
+    <%= link_to_add_association 'Adicionar Telefone', f, :phones %>
+    <%= f.fields_for :phones do |phone| %>
+       <%= render 'phone_fields', f: phone %> 
+    <% end %>
+  </div>
+
   <%= f.fields_for :address do |address_fields| %>
     <div class="field">
     <%= address_fields.label :street %><br>

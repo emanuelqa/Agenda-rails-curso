@@ -1,10 +1,11 @@
 class ContactsController < ApplicationController
   before_action :set_contact, only: [:show, :edit, :update, :destroy]
+  before_action :options_kind, only: [:new, :edit, :update, :create]
 
   # GET /contacts
   # GET /contacts.json
   def index
-    @contacts = Contact.all
+    @contacts = Contact.all.page(params[:page]).per(5)
   end
 
   # GET /contacts/1
@@ -16,12 +17,10 @@ class ContactsController < ApplicationController
   def new
     @contact = Contact.new
     @contact.build_address
-    options_kind
   end
 
   # GET /contacts/1/edit
   def edit
-    options_kind
   end
 
   # POST /contacts
@@ -72,7 +71,10 @@ class ContactsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def contact_params
-      params.require(:contact).permit(:name, :email, :rmk, :kind_id, address_attributes: [:street, :city, :state])
+      params.require(:contact).permit(:name, :email, :rmk, :kind_id,
+       address_attributes: [:street, :city, :state],
+       phones_attributes: [:id, :phone, :_destroy]
+       )
     end
 
     def options_kind
